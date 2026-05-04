@@ -7,20 +7,20 @@ import torch.nn.functional as F
 config = dotenv_values(find_dotenv(usecwd=True))
 TR_DATA_PATH = Path(config.get("TR_DATA_PATH"))
 
-def get_filepath(num: int, mod: str):
+def get_filepath(brain_index: int, mod: str):
     '''
-    Provides the path to the files containing a brain scan no. **num** and modality **mod**.
+    Provides the path to the files containing a brain scan no. **brain_index** and modality **mod**.
 
-    :param int num: A number between 1 and 369 representing the id of the brain scan.
+    :param int brain_index: A number between 1 and 369 representing the id of the brain scan.
     :param ["t1", "t1ce", "t2", "flair", "seg"] mod: Modality of the scan of the chosen brain. 
 
     '''
-    formated_num = format_num(num)
-    if formated_num != 355:
+    formated_index = format_index(brain_index)
+    if formated_index != 355:
         path = (
             TR_DATA_PATH /
-            (f"BraTS20_Training_" + formated_num) /
-            (f"BraTS20_Training_" + formated_num + f"_{mod}.nii")
+            (f"BraTS20_Training_" + formated_index) /
+            (f"BraTS20_Training_" + formated_index + f"_{mod}.nii")
         )
     else:
         path = (
@@ -66,11 +66,11 @@ def pad_to_256(img: torch.Tensor):
     img = F.pad(img, (pad_left, pad_right, pad_top, pad_bottom))
     return img
 
-def format_num(num):
+def format_index(brain_index: int):
     '''
     Formats the number to lenght 3, filling it with 0 from the left side.
-    Example: 9 -> 009
+    Example: '9' -> '009'
 
-    :param int num: Number to format.
+    :param int brain_index: Number to format.
     '''
-    return f"{num:03}" 
+    return f"{brain_index:03}" 
