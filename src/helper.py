@@ -28,7 +28,7 @@ def get_filepath(brain_index: int, mod: str):
         )
     return path
 
-def normalized_modality(brain: np.ndarray): #normalization scales to [0,1] (or similiar), standarization changes the data to N(0,1)
+def normalized_modality(brain: np.ndarray):
     '''
     Standarizes all the pixels from one modality to P ~ N(0,1).
 
