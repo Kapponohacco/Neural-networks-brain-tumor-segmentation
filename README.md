@@ -1,1 +1,1 @@
-Brain Tumore segemntation project using Neural Networks
+Brain Tumor segemntation project using Neural Networks
