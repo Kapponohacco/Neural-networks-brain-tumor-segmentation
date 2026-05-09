@@ -7,25 +7,28 @@ import torch.nn.functional as F
 config = dotenv_values(find_dotenv(usecwd=True))
 TR_DATA_PATH = Path(config.get("TR_DATA_PATH"))
 
-def get_filepath(brain_index: int, mod: str):
+def get_filepath(brain_index: int, mod: str = "t1ce"):
     '''
     Provides the path to the files containing a brain scan no. **brain_index** and modality **mod**.
 
     :param int brain_index: A number between 1 and 369 representing the id of the brain scan.
-    :param ["t1", "t1ce", "t2", "flair", "seg"] mod: Modality of the scan of the chosen brain. 
+
+    :param ["t1", "t1ce", "t2", "flair", "seg"] mod: Modality of the scan of the chosen brain. Defaults to "t1".
 
     '''
+
     formated_index = format_index(brain_index)
-    if formated_index != 355:
+    if formated_index == "355" and mod == "seg":
+        path = (
+            TR_DATA_PATH / "BraTS20_Training_355" / "W39_1998.09.19_Segm.nii"
+        )
+    else:
         path = (
             TR_DATA_PATH /
             (f"BraTS20_Training_" + formated_index) /
             (f"BraTS20_Training_" + formated_index + f"_{mod}.nii")
         )
-    else:
-        path = (
-            TR_DATA_PATH / "BraTS20_Training_355" / "W39_1998.09.19_Segm.nii"
-        )
+
     return path
 
 def normalized_modality(brain: np.ndarray):
