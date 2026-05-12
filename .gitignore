@@ -6,3 +6,4 @@ __pycache__/
 
 src/data/*
 src/download.ipynb
+src/wandb
