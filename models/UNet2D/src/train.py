@@ -1,6 +1,6 @@
 import nibabel as nib
 import numpy as np
-from model import UNet
+from model import UNet, UNetNorm
 from helper import get_cache
 from inference import infer
 from torch.utils.data import random_split, DataLoader, Dataset
@@ -22,6 +22,7 @@ config = {
 DATASET_PATH = Path(config["DATASET_PATH"])
 SAVE_PATH = Path(config["SAVE_PATH"])
 
+MODEL_VERSION = config["MODEL_VERSION"]
 NUM_BRAINS = int(config["NUM_BRAINS"])
 BATCH_SIZE = int(config["BATCH_SIZE"])
 
@@ -36,6 +37,7 @@ print("=== Training configuration ===")
 print(f"Device       : {device}")
 print(f"Dataset path : {DATASET_PATH}")
 print(f"Save path    : {SAVE_PATH}")
+print(f"Model version: {MODEL_VERSION}")
 print(f"Brains       : {NUM_BRAINS}")
 print(f"Batch size   : {BATCH_SIZE}")
 print(f"LR           : {LR}")
@@ -69,6 +71,11 @@ class CustomDataset(Dataset):
         brain = torch.cat([flair[keep], t1ce[keep]], dim=1)
         return brain, seg[keep]
 
+def collate_brains(batch):
+    xs = torch.cat([item[0] for item in batch], dim=0)
+    ys = torch.cat([item[1] for item in batch], dim=0)
+    return xs, ys
+
 print("Creating dataset...")
 dataset = CustomDataset(DATASET_PATH)
 print(f"Dataset loaded: {len(dataset)} brains")
@@ -80,8 +87,8 @@ train_sub, val_sub = random_split(dataset, [train_size, val_size])
 print(f"Train split: {len(train_sub)} brains")
 print(f"Val split  : {len(val_sub)} brains")
 
-train_loader = DataLoader(train_sub, batch_size=None, shuffle=True, pin_memory=True)
-val_loader = DataLoader(val_sub, batch_size=None, shuffle=False, pin_memory=True)
+train_loader = DataLoader(train_sub, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True, collate_fn=collate_brains)
+val_loader = DataLoader(val_sub, batch_size=BATCH_SIZE, shuffle=False, pin_memory=True, collate_fn=collate_brains)
 
 CLASS_NAMES = ["background", "necrotic", "edema", "enhancing"]
 
@@ -157,8 +164,14 @@ def train_one_epoch(model, loader, optimizer, criterion, device):
     avg_dice = {c: cumulative_dice[c] / num_batches for c in CLASS_NAMES}
     return total_loss / total_samples, avg_dice
 
-print("Creating model...")
-model = UNet()
+
+models = {
+    "UNet" : UNet(),
+    "UNetNorm": UNetNorm(),
+}
+
+print(f"Creating model...")
+model = models[MODEL_VERSION]
 model = model.to(device)
 num_params = sum(p.numel() for p in model.parameters())
 print(f"Model parameters: {num_params:,}")

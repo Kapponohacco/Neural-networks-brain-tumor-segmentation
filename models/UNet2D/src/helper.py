@@ -57,7 +57,7 @@ def pad_to_256(brain: torch.Tensor):
 def format_index(brain_index: int):
     '''
     Formats the number to lenght 3, filling it with 0 from the left side.
-    Example: '9' -> '009'
+    Example: '7' -> '007'
 
     :param int brain_index: Number to format.
     '''
