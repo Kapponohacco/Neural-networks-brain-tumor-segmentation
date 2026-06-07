@@ -112,18 +112,15 @@ def get_cache(brain_index, mod):
 
     if cache_path.exists():
         return torch.load(cache_path)
-
+    
 def compute_class_stats(dataset):
     class_counts = torch.zeros(4)
 
-    for idx in range(dataset.__len__()):
-        _, _, seg = dataset.data[idx]
-        has_tumor = seg.amax(dim=(1, 2)) > 0
-        keep = has_tumor
-        seg_kept = seg[keep]
+    for idx in range(len(dataset)):
+        _, seg = dataset[idx]
 
         for c in range(4):
-            class_counts[c] += (seg_kept == c).sum()
+            class_counts[c] += (seg == c).sum()
 
     total = class_counts.sum()
     freq = class_counts / total
