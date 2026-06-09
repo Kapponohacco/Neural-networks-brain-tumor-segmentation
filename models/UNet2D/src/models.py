@@ -146,7 +146,7 @@ class UNetResNet(nn.Module):
         self.dconv1 = DoubleConvNorm(128, 64)
         self.up0 = nn.ConvTranspose2d(64, 32, kernel_size=2, stride=2)
         self.dconv0 = DoubleConvNorm(96, 32)
-
+        self.up_final = nn.ConvTranspose2d(32, 32, kernel_size=2, stride=2)
         self.out = nn.Conv2d(32, 4, kernel_size=1)
 
     def forward(self, x):
@@ -165,5 +165,6 @@ class UNetResNet(nn.Module):
         x = self.dconv1(torch.cat([x, d1], dim=1))
         x = self.up0(x)
         x = self.dconv0(torch.cat([x, d0_conv], dim=1))
+        x = self.up_final(x)
 
         return self.out(x)
