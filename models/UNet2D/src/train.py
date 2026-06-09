@@ -111,7 +111,7 @@ def main():
                                       optimizer, scheduler, criterion,
                                       device, run, best_val_loss, best_path)
 
-        unfreeze_layers(model, "layer0", "layer1", "layer2")
+        unfreeze_layers(model, "layer0_conv", "layer1", "layer2")
         model.load_state_dict(torch.load(best_path)["model_state_dict"])
         
         optimizer, scheduler = make_optimizer_and_scheduler(

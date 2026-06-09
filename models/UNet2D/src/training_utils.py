@@ -31,4 +31,4 @@ def unfreeze_layers(model, *layer_names):
 
 def get_decoder_params(model):
     return [p for name, p in model.named_parameters()
-            if not name.startswith(ENCODER_LAYERS)]
+        if not any(name.startswith(enc) for enc in ENCODER_LAYERS)]
