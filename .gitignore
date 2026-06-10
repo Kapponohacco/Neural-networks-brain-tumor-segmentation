@@ -1,9 +1,7 @@
-__pycache__/
+*/__pycache__/
 *.pyc
+/dataset
 
 .venv
 .env
-
-src/data/*
-src/download.ipynb
-src/wandb
+**/wandb/
