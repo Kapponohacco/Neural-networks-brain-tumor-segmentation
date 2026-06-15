@@ -172,7 +172,9 @@ Final cloud-training configuration:
 
 * 369 MRI volumes
 * 40 epochs
-* Batch size of 3
+* Batch size of 6
+
+Additionally, class weight tuning based on class frequency was introduced during training. Instead of manually selected weights, class weights were computed as the square root of the inverse class frequency in the training dataset. This approach was used to better reflect the natural distribution of classes and further mitigate the effects of class imbalance.
 
 ---
 

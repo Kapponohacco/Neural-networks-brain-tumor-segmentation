@@ -64,19 +64,15 @@ U-Net architecture with a pretrained ResNet-34 encoder initialized from ImageNet
 
 ### Loss Function
 
-The final models were trained using weighted Cross Entropy Loss:
+The final models were trained using weighted Cross Entropy Loss.
 
-```python
-weights = [0.1, 2.0, 2.0, 2.0]
-```
-
-This weighting scheme compensates for the strong dominance of background pixels in the dataset.
+Additionally, we experimented with class weight tuning based on the actual frequency of classes in the training dataset, where weights were computed as the square root of the inverse class frequency, instead of manually chosen weights [0.1, 2.0, 2.0, 2.0].
 
 ### Final Training Configuration
 
 - Dataset size: 369 MRI volumes
 - Epochs: 40
-- Batch size: 3
+- Batch size: 6
 - Input channels: 2 (FLAIR + T1ce)
 - Output classes: 4
 
