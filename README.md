@@ -1,9 +1,9 @@
 # Segmentacja Guza Mózgu — BraTS2020
 
 > Projekt z przedmiotu Sieci Neuronowe  
-> Autorzy: [Imię 1], [Imię 2]  
+> Autorzy: Stanisław Burdzicki, Kacper Faliński  
 > Repozytorium: https://github.com/Kapponohacco/Neural-networks-brain-tumor-segmentation  
-> Prezentacja wyników: [link do prezentacji]
+> Prezentacja wyników: https://docs.google.com/presentation/d/1Th9mMv2q7glSuMfufvlzZwXIwEfmXAW4JF6QFSwf-Zo/edit?usp=sharing
 
 ---
 
